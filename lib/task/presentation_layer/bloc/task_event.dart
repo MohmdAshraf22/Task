@@ -7,3 +7,6 @@ class ChangeTabEvent extends TaskEvent {
   final int index ;
   ChangeTabEvent(this.index);
 }
+class GetUsersEvent extends TaskEvent {
+  GetUsersEvent();
+}
