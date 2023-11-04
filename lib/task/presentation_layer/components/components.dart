@@ -8,7 +8,9 @@ import '../../../core/services/dep_injection.dart';
 class CategoryBuilder extends StatelessWidget {
   final String userName;
   final int id;
+
   const CategoryBuilder({super.key, required this.userName, required this.id});
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -32,11 +34,11 @@ class TabBuilder extends StatelessWidget {
   final TaskBloc bloc;
   final String title;
   final int index;
-  const TabBuilder(
-      {super.key,
-      required this.bloc,
-      required this.title,
-      required this.index});
+
+  const TabBuilder({super.key,
+    required this.bloc,
+    required this.title,
+    required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -71,42 +73,47 @@ class TabBuilder extends StatelessWidget {
 }
 
 class CategoriesTab extends StatelessWidget {
-  const CategoriesTab({super.key, });
+  const CategoriesTab({super.key,});
+
   @override
   Widget build(BuildContext context) {
     TaskBloc bloc = sl();
-    return SizedBox(
-      height: 50.h,
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(10.sp),
-            child: Row(
-              children: [
-                const Text("Categories Views"),
-                const Spacer(),
-                TextButton(onPressed: () {}, child: const Text("See All"))
-              ],
-            ),
+    return BlocBuilder<TaskBloc, TaskState>(
+      builder: (context, state) {
+        return SizedBox(
+          height: 50.h,
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(10.sp),
+                child: Row(
+                  children: [
+                    const Text("Categories Views"),
+                    const Spacer(),
+                    TextButton(onPressed: () {}, child: const Text("See All"))
+                  ],
+                ),
+              ),
+              Expanded(
+                child: SizedBox(
+                  child: ListView.separated(
+                      itemBuilder: (context, index) {
+                        return CategoryBuilder(
+                            userName: bloc.users[index].userName,
+                            id: bloc.users[index].userId);
+                      },
+                      separatorBuilder: (context, index) {
+                        return SizedBox(
+                          height: 10.sp,
+                        );
+                      },
+                      itemCount: bloc.users.length),
+                ),
+              ),
+            ],
           ),
-          Expanded(
-            child: SizedBox(
-              child: ListView.separated(
-                  itemBuilder: (context, index) {
-                    return CategoryBuilder(
-                        userName: bloc.users[index].userName,
-                        id: bloc.users[index].userId);
-                  },
-                  separatorBuilder: (context, index) {
-                    return SizedBox(
-                      height: 10.sp,
-                    );
-                  },
-                  itemCount: bloc.users.length),
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
